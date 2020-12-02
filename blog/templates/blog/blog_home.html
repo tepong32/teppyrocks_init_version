@@ -1,0 +1,158 @@
+{% extends 'blog/blog_base.html' %}
+{% load crispy_forms_tags %} 
+{% load markdown_deux_tags %}
+
+{% block blog_content %}
+
+<div
+  class="container-fluid border border-success ml-1"
+  style="background-color: rgba(1, 0, 0, 0.2)"
+>
+  <!-- PAGINATION PART for users' posts area -->
+  <div class="row">
+    <div class="col-4 ml-2 mt-2">
+      <h5>Whats' happening: </h5>
+      <small>
+      ({{ page_obj.paginator.count }} total posts) <br>
+      (actually, what can I call this page?)
+      </small>
+      <hr />
+      <div>
+        {% if is_paginated %}
+          <a class="btn btn-sm btn-outline-info mb-4" href="?page=1"> First </a>
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <a class="btn btn-sm btn-info mb-4" href="?page={{ num }}">
+                {{ num }}
+              </a>
+            {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+              <a class="btn btn-sm btn-outline-info mb-4" href="?page={{ num }}">
+                {{ num }}
+              </a>
+            {% endif %}
+          {% endfor %}
+        <a
+          class="btn btn-sm btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">
+          Last
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-7 border border-info ml-auto mb-1 mt-2 mr-2" style="font-size: 12px; justify-content: left">
+      <strong>NO SHITPOSTING. </strong> This site is not for such. This is supposed to be a forum-like site where you can share meaningful things and ideas to other users. Use Facebook for your rants. <br><br>
+      <strong>BE DETAILED. </strong> If you're asking for help or looking for something, be as detailed as possible. Broad questions often tend to get "helpers" just pass on answering you for they will have to ask specifics first which will lead them to having to check the post again before being able to give an answer or solution. "People are willing to help other people who're trying to help themselves." <br><br>
+      <strong>BE COURTEOUS & RESPONSIBLE. </strong> Listed a "looking for" or "help"-tagged post? If the problem's solved, take time to delete it or move it to the archives (not yet applicable) so, other users will not have to waste their time checking it out or trying to help you with it. <br>
+      On second thought, maybe deleting "help"-tagged posts is not advisable?<br><br>
+    </div>
+  </div>
+
+  <hr />
+  {% for post in posts %}
+  <div class="border border-success mt-1 mb-1">
+    <article class="media content-section ml-2 mt-2 mb-3">
+      <img
+        class="rounded-circle article-img"
+        src="{{ post.author.profile.image.url }}"
+        style="height: 50px; width: 50px">
+
+      <div class="media-body">
+        <div class="article-metadata">
+          <div class="row" style="font-size: 12px">
+            <a
+              class="ml-3 mr-5"
+              href="{% url 'profile' post.author %}"
+              style="font-family: 'Arial'; color: black"
+              >{{ post.author }}</a>
+            <!-- profile badges (chess pieces) -->
+            {% if post.author.profile.user_group == "Pawn" %}
+            <i class="fa fa-chess-pawn" style="color: blue"></i>
+            {% elif post.author.profile.user_group == "Rook" %}
+            <i class="fa fa-chess-rook"></i>
+            {% elif post.author.profile.user_group == "Knight" %}
+            <i class="fa fa-chess-knight"></i>
+            {% elif post.author.profile.user_group == "Bishop" %}
+            <i class="fa fa-chess-bishop"></i>
+            {% elif post.author.profile.user_group == "Queen" %}
+            <i class="fa fa-chess-queen"></i>
+            {% elif post.author.profile.user_group == "King" %}
+            <i class="fa fa-chess-king" style="color: orange"></i>
+            {% endif %}
+            <small class="text-muted ml-2">
+              on {{ post.date_posted|date:"F d, Y" }}</small
+            >
+
+            
+            <!-- create a whitespace here for the update&delete buttons to be moved to the right -->
+            <div class="ml-5" style="font-size: 10px">
+              {% if post.author == user %}
+              <a
+                class="fa fa-edit text-sm ml-2 mr-2" style="color: green"
+                href="{% url 'post-update' post.id %}"
+              >
+              </a>
+              <a
+                class="fa fa-trash text-sm ml-2 mr-2"
+                href="{% url 'post-delete' post.id %}" style="color: red"
+              >
+              </a>
+              <a
+                class="btn btn-outline-info btn-sm ml-2 mr-2"
+                href="{% url 'user-posts' post.author %}" style="font-size: 12px"
+              >
+                All your posts
+              </a>
+              
+            {% else %}
+              <a
+                class="btn btn-outline-info btn-sm"
+                href="{% url 'user-posts' post.author %}" style="font-size: 12px"
+              >
+                All posts by {{ post.author }}
+              </a>
+              <a class="fa fa-thumbs" href="#">likes or upvotes links</a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- post.id argument was needed here for individual posts to be displayed -->
+        <div class="row">
+          <h6>
+            <a
+              class="article-title col-4 ml-3"
+              href=" {% url 'post-detail' post.id %}"
+            >
+              {{ post.title|truncatechars:100 }}</a
+            >
+          </h6>
+          <div class="col-2 ml-5">
+            <small><i>Tag: {{post.tag}}</i></small>
+          </div>
+        </div>
+        {% if post.date_modified != post.date_posted %}
+        <i class="dropwdown-divider mr-auto text-muted">
+          <small>last modified: {{ post.date_modified }}</small>
+        </i>
+        {% endif %}
+      </div>
+    </article>
+  </div>
+  {% endfor %} {% if is_paginated %}
+  <a class="btn btn-sm btn-outline-info mb-4" href="?page=1"> First </a>
+  {% for num in page_obj.paginator.page_range %} {% if page_obj.number == num %}
+  <a class="btn btn-sm btn-info mb-4" href="?page={{ num }}"> {{ num }} </a>
+  {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+  <a class="btn btn-sm btn-outline-info mb-4" href="?page={{ num }}">
+    {{ num }}
+  </a>
+  {% endif %} {% endfor %}
+  <a
+    class="btn btn-sm btn-outline-info mb-4"
+    href="?page={{ page_obj.paginator.num_pages }}"
+  >
+    Last
+  </a>
+  {% endif %}
+</div>
+
+{% endblock blog_content %}

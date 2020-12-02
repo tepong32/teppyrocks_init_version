@@ -1,0 +1,30 @@
+{% extends 'home/landing.html' %} {% block main_content %} {% load
+crispy_forms_tags %}
+
+<div class="row">
+  <div class="col-2">Ad Space, maybe?</div>
+  <div
+    class="overflow-auto col-8 border border-success"
+    style="height: 600px; background-color: rgba(255, 0, 255, 0.1)"
+  >
+    <div
+      class="container"
+      style="height: 40px; background-color: rgba(0, 0, 0, 0)"
+    ></div>
+    <div class="col">
+      <h4 class="text-center">What can this page do, btw?</h4>
+    </div>
+
+    <div class="container-fluid col-8">
+      <div class="content-section">
+        <form method="POST">
+          <!-- default tong POST // required ung csrf token sa baba-->
+          {% csrf_token %}
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-2">Ad Space, maybe?</div>
+</div>
+
+{% endblock main_content %}

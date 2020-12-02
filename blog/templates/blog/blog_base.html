@@ -1,0 +1,21 @@
+{% extends 'home/starter.html' %}
+{% load crispy_forms_tags %}
+
+{% block pagedown_head %}
+  {{ form.media }}
+{% endblock pagedown_head %}
+
+{% block main_content %}
+<!-- from the main template: home/starter.html -->
+
+<!-- this block will contain the default look for the blog app -->
+<div class="row">
+  <div class="col ml-auto mt-3">Feed Banner</div>
+  <div class="col ml-auto mt-3">Dropdown for Posts Filter here</div>
+</div>
+
+<!-- the actual content for the blog app inside the main_content block -->
+{% block blog_content %}
+{% endblock blog_content %}
+
+{% endblock main_content %}

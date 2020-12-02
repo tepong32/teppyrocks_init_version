@@ -1,0 +1,34 @@
+{% extends 'home/starter.html' %} 
+<!--  load crispy_forms_tags  -->
+
+{% block main_content %}
+<h2>{{object.title}}</h2>
+<div class="container-fluid border border-success">
+	<article class="media content-section">
+	  <div class="media-body">
+	    <div class="article-metadata">
+	    	{% if object.author == request.user %}
+		        <a class='btn btn-outline-success btn-sm mr-1' href="{% url 'lounge-ul-update' object.id %}">
+		        	<span class="fa fa-pen"><span> </a>
+		        <a class='btn btn-outline-danger btn-sm mr-1' href="{% url 'lounge-ul-delete' object.id %}">
+		        	<span class="fa fa-trash"><span> </a>
+		        <a class='btn btn-outline-secondary btn-sm mr-1' href="{% url 'lounge-ul-home' %}">
+		        	<span class="fa fa-arrow-left"><span>
+		        </a>
+	        {% else %}
+	        	<!-- these two buttons may need to be changed to js buttons showing active user selected one -->
+	        	<!-- plus counter for upvotes and downvotes -->
+	        	<!-- maybe do the polling app tutorial on the django webpage to get ideas -->
+	        	<a class='btn btn-outline-success btn-sm fa fa-thumbs-up mr-1' href="#">Up</a>
+	        	<a class='btn btn-outline-danger btn-sm fa fa-thumbs-down mr-1' href="#">Down</a>
+	        {% endif %}
+	    </div>
+	    <h2 class="article-title">{{ object.message|linebreaks }}</h2>
+	  </div>
+
+	</article>
+</div>
+
+
+
+{% endblock main_content %}

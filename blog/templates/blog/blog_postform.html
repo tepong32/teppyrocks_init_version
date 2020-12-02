@@ -1,0 +1,34 @@
+<!-- extends 'blog/blog_base.html' -->
+{% load crispy_forms_tags %}
+
+
+{% block pagedown_head %}
+  {{ form.media }}
+{% endblock pagedown_head %}
+
+{% block blog_content %}
+<div class="row">
+  <div class="col-1"></div>
+  <div
+    class="overflow-auto col-md-10 border border-success"
+    style="background-color: rgba(1, 0, 0, 0.2)"
+  >
+    <div class="content-section">
+      <form method="POST">
+        {% csrf_token %}
+        <!-- this is a required line for added security -->
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-1">Create Post</legend>
+          {{ form|crispy }}
+        </fieldset>
+
+        <div class="form-group">
+          <button class="btn btn-outline-info" type="submit">Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-1"></div>
+</div>
+
+{% endblock %}

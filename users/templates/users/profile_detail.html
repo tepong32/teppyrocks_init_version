@@ -1,0 +1,206 @@
+{% extends 'users/users_base.html' %}
+
+<!-- Users' Profile page -->
+<!-- Self-explanatory page...I guess. LOL -->
+
+{% block profile_info_area %}
+
+<div class="col">
+  <div class="card-body">
+    <div class="card card-widget widget-user">
+      <!-- Add the bg color to the header using any of the bg-* classes -->
+      {% if user.profile.user_group == "King" %}
+      <div class="widget-user-header bg-red">
+        {% elif user.profile.user_group == "Pawn" %}
+        <div class="widget-user-header bg-primary">
+          {% endif %}
+
+          <h3 class="widget-user-username">
+            <!-- USER BADGES DEPENDING ON USER_GROUP -->
+            {% if user.profile.user_group == "Pawn" %}
+            <i class="fa fa-chess-pawn ml-3"></i>
+            {% elif user.profile.user_group == "Rook" %}
+            <i class="fa fa-chess-rook ml-3"></i>
+            {% elif user.profile.user_group == "Knight" %}
+            <i class="fa fa-chess-knight ml-3"></i>
+            {% elif user.profile.user_group == "Bishop" %}
+            <i class="fa fa-chess-bishop ml-3"></i>
+            {% elif user.profile.user_group == "Queen" %}
+            <i class="fa fa-chess-queen ml-3"></i>
+            {% elif user.profile.user_group == "King" %}
+            <i class="fa fa-chess-king ml-3"></i>
+            {% endif %}
+          </h3>
+          <small
+            class="text text-sm"
+            style="
+              font-family: 'Monotype Corsiva';
+              size: 8px;
+              color: rgba(1, 0, 1, 0.5);
+            "
+          >
+            {{ user.profile.title }}</small
+          >
+
+          <div class="content-section">
+            <div class="media">
+              <img
+                class="rounded-circle account-img elevation-5"
+                src="{{ user.profile.image.url }}"
+                style="height: 120px; width: 100px"
+              />
+              <div class="media-body">
+                <div class="row">
+                  <h4 class="account-heading ml-3">
+                    <strong> {{ user.username }} </strong>
+                  </h4>
+
+                  <!-- request.user.username means the current logged-in user -->
+                  {% if user.username == request.user.username %}
+                  <div class="col">
+                    <a
+                      class="text-sm"
+                      href="{% url 'profile-edit' user.username %}"
+                      >Edit your profile</a
+                    >
+                  </div>
+                  {% endif %}
+                </div>
+                <small>
+                  <i class="text-success text-sm">
+                    member since {{ user.profile.date_registered|date:"F Y" }}
+                  </i>
+                </small>
+
+                <div class="content-section">
+                  <div class="media">
+                    <p class="media-body text-dark ml-3">
+                      <strong>{{ user.profile.quote }}</strong>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="container col-md-3">
+                qr code<br />
+                wallet address
+                <div>
+                  <a class="btn btn-outline-dark btn-sm mr-1 mt-3" href="#">
+                    Send a message
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer" style="font-size: 12px">
+          <div class="row">
+            <div class="col-5 col-sm-3">
+              <div
+                class="nav flex-column nav-tabs nav-tabs-right h-100"
+                id="vert-tabs-right-tab"
+                role="tablist"
+                aria-orientation="vertical"
+              >
+                <a
+                  class="nav-link"
+                  id="vert-tabs-right-contactme-tab"
+                  data-toggle="pill"
+                  href="#vert-tabs-right-contactme"
+                  role="tab"
+                  aria-controls="vert-tabs-right-contactme"
+                  aria-selected="false"
+                  >Contact Me</a
+                >
+                <a
+                  class="nav-link active"
+                  id="vert-tabs-right-intro-tab"
+                  data-toggle="pill"
+                  href="#vert-tabs-right-intro"
+                  role="tab"
+                  aria-controls="vert-tabs-right-intro"
+                  aria-selected="true"
+                  >Intro</a
+                >
+                <a
+                  class="nav-link"
+                  id="vert-tabs-right-works-tab"
+                  data-toggle="pill"
+                  href="#vert-tabs-right-works"
+                  role="tab"
+                  aria-controls="vert-tabs-right-works"
+                  aria-selected="false"
+                  >Work Gallery</a
+                >
+              </div>
+            </div>
+
+            <div class="col-7 col-sm-9">
+              <div class="tab-content" id="vert-tabs-right-tabContent">
+                <div
+                  class="tab-pane fade"
+                  id="vert-tabs-right-contactme"
+                  role="tabpanel"
+                  aria-labelledby="vert-tabs-right-contactme-tab"
+                >
+                  <!-- user.profile.reach_me_intro -->
+                  You can reach me thru the ff links: <br />
+                  <i class="fa fa-envelope"></i> email:
+                  <i
+                    ><a class="text-sm text-primary" href="#" alt=""
+                      >{{ user.email }}</a
+                    ></i
+                  >
+                  <br />
+                  <i class="fa fa-user"></i> fb
+                  <i
+                    ><a class="text-sm text-primary" href="#" alt=""
+                      >{{user.profile.FB}}</a
+                    ></i
+                  >
+                  <br />
+                  <i class="fa fa-users"></i> tw:
+                  <i
+                    ><a class="text-sm text-primary" href="#" alt=""
+                      >{{user.profile.TW}}</a
+                    ></i
+                  >
+                  <br />
+                  <i class="fa fa-users"></i> ig:
+                  <i
+                    ><a class="text-sm text-primary" href="#" alt=""
+                      >{{user.profile.IG}}</a
+                    ></i
+                  >
+                  <br />
+                </div>
+
+                <div
+                  class="tab-pane fade show active"
+                  id="vert-tabs-right-intro"
+                  role="tabpanel"
+                  aria-labelledby="vert-tabs-right-intro-tab"
+                >
+                  aaaa
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  id="vert-tabs-right-works"
+                  role="tabpanel"
+                  aria-labelledby="vert-tabs-right-works-tab"
+                >
+                  Work Gallery (photos) <br />
+                  Links to sites
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.card-body -->
+  </div>
+
+  {% endblock profile_info_area %}
+</div>

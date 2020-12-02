@@ -1,0 +1,129 @@
+{% load adminlte_helpers i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    {% block title_outer %}
+        <title>{% block title %}{{ site.name }}{% endblock %}</title>
+    {% endblock %}
+
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {% endblock %}
+
+
+    {% block stylesheets %}
+        {% include 'adminlte/lib/_styles.html' %}
+    {% endblock %}
+
+    <!-- idk what this does but whatever -->
+    {% block extra_head %}{% endblock %}
+
+    <!-- added this part for pagedown header // see blog/blog_postform.html -->
+    {% block pagedown_head %}{% endblock pagedown_head %}
+
+</head>
+
+<body class="hold-transition sidebar-mini sidebar-collapse layout-fixed">
+
+<!-- so far, chopping up this part is good -12/02 -->
+{% include 'home/_nav.html' %}
+
+
+
+
+<!-- MAIN CONTENT AREA -->
+<!-- login area shows the login screen when Log-in link is clicked. Otherwise, it shows the landing page at '_home.html'-->
+{% block login_area %}
+  <!-- FLASH MESSAGE block -->
+  <!-- this is here so the flash messages (if there's any) will be shown on any page of the site -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  <!-- /FLASH MESSAGE block -->
+
+  {% if user.is_authenticated %}
+
+    <!-- the actual dynamic area for the website -->
+    {% block main_content %} {% endblock main_content %}
+
+  {% else %} 
+    {% include 'home/_home.html' %}
+  {% endif %}
+{% endblock login_area %}
+
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        <b>Version</b> 0.1
+    </div>
+
+    <strong>Copyright &copy; 2020.
+        
+    </strong> All rights
+    reserved.  
+</footer>
+
+
+
+<!-- jquery script for the marked and markdown part of css -->
+<!-- place above bootstrap // not sure if there's any reason why -->
+<script
+  src="https://code.jquery.com/jquery-3.4.1.slim.js"
+  integrity="sha256-BTlTdQO9/fascB1drekrDVkaKd9PkwBymMlHOiG+qLI="
+  crossorigin="anonymous"></script>
+<!-- fontawesome -->
+<script src="https://use.fontawesome.com/2363b49f19.js"></script>
+
+{% block javascript %}
+    {% include 'adminlte/lib/_scripts.html' %}
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
+
+{% block extra_foot %}{% endblock %}
+
+{% block extrascripts %}{% endblock extrascripts %}
+
+
+<!-- jquery script for the marked part of css // google: "marked.min.js cdn"-->
+<!-- place above bootstrap // not sure if there's any reason why -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.8.0/marked.min.js"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+
+
+<!-- might need to study more about jquery...or always copy-paste! -->
+<!-- this shows what part of the page/site we want to turn into markdown. In this case, the content-markdown classes for divs (put into the divs for {{post.content}}) -->
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".content-markdown").each(function(){
+            var content = $(this).text()
+            var markedContent = marked(content)
+            $(this).html(markedContent)
+        });
+
+
+        $(".post-detail-item img").each(function(){
+            $(this).addClass("img-responsive")
+        });
+
+        // for modals/popup create post window
+        $("#blogpost-create-modal").modalForm({
+            formURL: "{% url 'post-new' %}"});
+
+        $("#todo-create-modal").modalForm({
+            formURL: "{% url 'todo-new' %}"});
+
+        // datepicker testing
+        $('#datetimepicker').data("DateTimePicker").FUNCTION()
+    });
+</script>
+
+
+
+</body>
+</html>

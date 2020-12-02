@@ -1,0 +1,178 @@
+{% extends 'home/starter.html' %}
+{% load crispy_forms_tags %}
+<!--  load pinax_announcements_tags  -->
+
+<!-- User Home page -->
+<!-- This is the page related to the <home> icon button on the navigation bar or '<domain_name>/home' url.
+Just viewable by logged-in users.  -->
+
+{% block main_content %}
+
+
+<div class="row">
+    <!-- Chat area -->
+    <div class="col col-8" style="padding: 10px">
+      This part will either be a Chat window, a Messages area, or a combination of both; just with tabs same with that of the profile page. <br><br>
+
+      Will be studying how to create a messaging system first. Might be pausing working on this project for now since the tutorial I found for implementing a messaging and notifications system is quite a long one...but, I guess, not longer than what I spent putting all these things together especially modifying how the site looks. (Deym! The backend seemed easier...WAY EASIER! :D)<br><br>
+
+      ATM, almost all features of this site aside from messaging and notifications is functional. Might have just overlooked some pages and re-directs (believe me, I tried to manually check all pages) but functionality-wise, this is a working product. <br><br>
+
+      Will also be adding a dark-mode toggle, as well some fancy, nerd-looking features for the site (I already have quite a few on my list). Of course, those will take a while. Err...I'd say a long while. :D Well, that's what updates and patches are for, anyways. Right?? <br><br>
+
+      Looking forward to seeing testers share their ideas of what can be added and/or modified.
+
+
+    </div>
+
+    <!-- CARDS area -->
+    <div class="container-fluid col">
+      <!-- To-Dos -->
+      <div class="container-fluid " style="height: 900px">
+        <div class="card card-warning">
+          <div class="card-header" style="max-height: 40px">
+            <i class="card-title text text-sm">Reminders:</i>
+
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+              </button>
+            </div>
+            <!-- /.card-tools -->
+          </div>
+        <div class="card-body" style="padding: 0">
+            <div class="card card-widget widget-user">
+            <div class="content-section">
+            <div class="media">
+              <div class="media-body text-justify overflow-auto" style="padding: .5rem; max-height: 250px">
+                <i style="font-size: 12px">
+                Got something to do later? Create a reminder and see it here everytime you check back in!
+                </i>
+                {% for todo in todos %}
+                  <hr>
+                <div clas="row">
+                  <i class="text text-sm text-muted" href="#"><b>{{ todo.category }}</b></i>
+                  </i>
+                    <a class='fa fa-edit text-sm ml-3 mr-1' href="{% url 'todo-update' todo.id %}" style="color: green"></a>
+                    <a class='fa fa-trash text-sm ml-1 mr-1' href="{% url 'todo-delete' todo.id %}" style="color: red"></a>
+                    <i class="text-sm"><small class="text pull-right ml-5"> Due: <text class="text-danger">{{ todo.finish_by|date:"F d" }}</text></small></i>
+              </div>
+                <div class="text text-sm ml-3"> {{ todo.desc|linebreaks }}</div>
+                <div class="row ml-3">
+                  <div class="text text-sm"> Status: {{ todo.status }} </div>
+                </div>
+                <hr>
+              {% endfor %}
+            </div>
+
+        </div>
+
+        </div>
+        <!-- where are the open div tags for these three? -->
+        </div>
+        </div>
+                  <div class="card-footer" style="font-size: 12px; background-color: rgba(0,0,1,.15);">
+              no footer atm, can be removed
+          </div>
+        </div> <!-- /To-Dos -->
+
+
+      <!-- feed area -->
+      <h4>Newest Posts</h4>
+      <i class="ml-auto">filter here </i>
+      <div class="container-fluid overflow-auto" style="max-height: 450px">
+        
+        {% for post in blogposts %}
+        <div class="border border-success mt-1 mb-1">
+          
+          <article class="media media-sm content-section ml-2 mt-2">
+            <div class="col col-2">
+              <a href="{% url 'profile' post.author %}">
+                <img class='rounded-circle article-img' src='{{ post.author.profile.image.url }}' style="height: 35px; width: 35px">
+                <i class="ml-3"style="font-size: 9px;font-family: 'Monotype Corsiva'; color: black">
+                  {{ post.author }}</i>
+              </a>
+            </div>
+            <div class="media-body ml-2">
+              <div class="article-metadata">
+              <div class="row">
+                <a class="article-title col-8 ml-3" href=" {% url 'post-detail' post.id %}">
+                  {{ post.title|truncatechars:20 }}
+                </a>
+                <div class=" col ml-2">
+                  <i style="font-size: 10px">
+                    <small>{{ post.date_posted|date:"F d" }}</small>
+                  </i>
+                </div>
+              </div>
+
+                <i class="ml-3" style="font-size: 12px">
+                {% if post.author == user %}
+                    <a class='fa fa-edit text-sm ml-2 mr-1' href="{% url 'post-update' post.id %}" style="color: green"></a>
+                    <small class="text-muted ml-2"><i class="fa fa-tag">: {{post.tag}}</i></small>
+                {% else %}
+                    <small class="text-muted ml-2"><i class="fa fa-tag">: {{post.tag}}</i></small>
+                {% endif %}
+                </i>
+              </div>
+              </div>
+          </div>
+          </article>
+
+        {% endfor %}
+
+        {% if is_paginated %}
+          <a class='btn  btn-sm btn-outline-info mb-4' href="?page=1"> First </a>
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <a class='btn btn-sm btn-info mb-4' href="?page={{ num }}"> {{ num }} </a>
+            {%  elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+              <a class='btn btn-sm btn-outline-info mb-4' href="?page={{ num }}"> {{ num }} </a>
+            {% endif %}
+          {% endfor %}
+          <a class='btn btn-sm btn-outline-info mb-4' href="?page={{ page_obj.paginator.num_pages }}"> Last </a>    
+        {% endif %}
+      </div>   <!-- / feed area -->
+    </div>
+   
+
+
+
+<!-- /1st row right -->
+<!-- outmost div rightcontaining todo and the part below it (column-wise) -->
+
+
+<!-- 2nd row right -->
+<div class="card card-dark">
+  <div class="card-header">
+    <h3 class="card-title">Members</h3>
+    <i class="text text-sm ml-2"><small>(Need help? Got suggestions?)</small></i>
+  </div>
+  <div class="card-body">
+    {% for u in users %}
+    <div class="content-section">
+      <div class="media">
+          <img class="rounded-circle account-img elevation-5" src="{{ u.profile.image.url }}" style="height: 30px; width: 30px">
+          <div class="media-body">
+            <div class="row">
+                <h6 class="account-heading ml-3 mt-2">
+                  <a href="{% url 'profile' u.username %}">{{ u.username }}</a>
+                </h6>
+                <a class='btn btn-dark btn-sm ml-auto mt-1' href="#"> message </a>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+  <!-- /2nd row right -->
+  </div>
+<!-- /outmost div right column -->
+</div>
+<!-- IDK where these closing tags are linked to but this made the page work so... LEAVE THEM BE. :D -->
+
+</div>
+</div>
+
+
+
+{% endblock main_content %}

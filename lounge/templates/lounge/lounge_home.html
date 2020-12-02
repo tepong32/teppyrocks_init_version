@@ -1,0 +1,53 @@
+{% extends 'home/starter.html' %}
+
+{% block main_content %}
+
+<div class="container-fluid">
+  <h2>Unsent Letters</h2>
+  <small>
+    maybe try to implement "claps" like that on Medium website for each of these
+    posts <br />
+    check UL # 1<br />
+    know how to add many contexts in one view and then filter out each of them
+    and place categories inside its own tab on app's home page.
+  </small>
+  <div class="row">
+    <div class="col-8">
+      {% if is_paginated %}
+        <a class="btn btn-sm btn-outline-info mb-1" href="?page=1"> First </a>
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+          <a class="btn btn-sm btn-info mb-1" href="?page={{ num }}"> {{ num }} </a>
+          {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+          <a class="btn btn-sm btn-outline-info mb-1" href="?page={{ num }}">
+            {{ num }}
+          </a>
+          {% endif %}
+        {% endfor %}
+      <a class="btn btn-sm btn-outline-info mb-1" href="?page={{ page_obj.paginator.num_pages }}">
+        Last
+      </a>
+      {% endif %}
+
+      <hr />
+
+      {% for u_letter in u_letters %} Title:
+      <a class="text text-lg" href="{% url 'lounge-ul-detail' u_letter.id %}">
+        {{ u_letter.title }}</a>
+      <div class="row">
+        <div class="text text-sm ml-2">for: {{ u_letter.letter_for }}</div>
+        <small class="text text-sm ml-5">
+          on: {{ u_letter.date_posted|date:"F, d, Y" }}</small>
+      </div>
+      <hr>
+      {% endfor %}
+    </div>
+    <div class="col-4">
+      <a class="btn btn-outline-success" href="{% url 'lounge-ul-create' %}">
+        Post Anonymously</a>
+      <span class="fa fa-fire-alt" href="{% url 'lounge-ul-create' %}"></span>
+    </div>
+  </div>
+</div>
+
+{% endblock main_content %}

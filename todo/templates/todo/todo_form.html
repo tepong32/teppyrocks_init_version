@@ -1,0 +1,27 @@
+ <!-- extends 'home/starter.html'  -->
+{% load crispy_forms_tags %}
+
+{% block main_content %}
+<div class="container-fluid">
+  <h2>Your To-Do's</h2>
+    <div class="col">
+      <div class="container" style="background-color: rgba(1, 0, 0, 0.2)">
+        <div class="content-section">
+          <form method="POST">
+            {% csrf_token %}
+            <!-- this is a required line for added security -->
+            <fieldset class="form-group">
+              <legend class="border-bottom mb-1">Create ToDo</legend>
+              {{ form|crispy }}
+            </fieldset>
+
+            <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main_content %}
+</div>

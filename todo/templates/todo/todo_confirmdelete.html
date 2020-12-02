@@ -1,0 +1,31 @@
+{% extends 'home/starter.html' %}
+
+{% block main_content %}
+<div class="border border-warning" style="padding: 10px">
+  <div class="content-section">
+    <form method="POST">
+      {% csrf_token %}
+      <!-- this is a required line for added security -->
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-1"><b> You are about to delete reminder: </b></legend>
+        <h4>
+          "<b>{{ object.desc }}</b>"
+        </h4>
+        
+          <i class="text text-sm">
+            Please make sure that this has been completed as you cannot undo this
+            action.</i>
+      </fieldset>
+
+      <div class="form-group">
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'home' %}">
+          I changed my mind.
+        </a>
+        <button class="btn btn-sm btn-outline-danger" type="submit">
+          Yes, Delete.
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock main_content %}

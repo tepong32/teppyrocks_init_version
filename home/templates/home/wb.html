@@ -1,0 +1,66 @@
+{% extends 'home/starter.html' %}
+ <!-- load pinax_announcements_tags  -->
+
+<!-- Welcome Back page -->
+<!-- This is the html page rendered when a logged-in user clicks on the site logo link (upper left corner).
+A welcome back message together with some other things the dev/site owner wants him/her to see.
+Most likely, this page will just be seen by users who opens a new tab/window on a browser where they are already logged in and goes to the site's url. -->
+
+{% block main_content %}
+
+<h4 class="text text-center">Hello, {{request.user.username}}!</h4>
+<hr>
+<div class="row">
+	<h4 class="col-8">Announcements:</h4>
+	<div>
+		<h6>Check out our newest members!</h6>
+		<small>
+			<i class="text text-sm" style="font-weight: 10; color: red">(We now have: {{ user.count }} users! (how to show count? LOL)</i><br>
+		</small>
+	</div>
+</div>
+<div class="row">
+	<div class="overflow-auto col-8" style="max-height: 250px; padding: 1rem">
+    <!--  announcements as announcement_list  -->
+
+    {% if announcement_list %}
+        <div class="announcements">
+            {% for announcement in announcement_list %}
+                <div class="announcement">
+                    <strong>{{ announcement.title }}</strong><br />
+                    {{ announcement.content }} <br/>
+                    by {{announcement.creator}} <br/>
+                    {{announcement.publish_start}} | {{announcement.publish_end}}<br/>
+<!--                     <a href="{{ announcement.get_absolute_url }}">Read more...</a>
+                    {% if announcement.dismiss_url %}
+				        <form class="form ajax" data-replace-closest=".announcement" action="{{ announcement.dismiss_url }}" method="post">
+				            {% csrf_token %}
+				            <button class="btn btn-default">Clear</button>
+				        </form>
+				    {% endif %} -->
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+	</div>
+
+	<div class="overflow-auto col" style="max-height: 250px; padding: 1rem">
+		
+		{% for u in users %}
+		<div class="row">
+			<div class="col-4">
+				<a href="{% url 'profile' u.username %}">{{u.username}}</a>
+			</div>
+			<div class="col">
+				<small class="text text-muted" style="font-family: 'Arial-Black'; font-size: 10px">registered: {{ user.date_joined|date:"F d, Y" }}</i></small>
+				<br>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+</div>
+<hr>
+
+
+{% endblock main_content %}

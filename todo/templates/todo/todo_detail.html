@@ -1,0 +1,43 @@
+{% extends 'home/starter.html' %}
+<!--  load crispy_forms_tags  -->
+
+{% block main_content %}
+<h2>Your To-Do for {{object.category}}</h2>
+<div class="container-fluid border border-success">
+  <article class="media content-section">
+    <img
+      class="rounded-circle article-img"
+      src="{{ object.author.profile.image.url }}"
+    />
+
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'profile' object.author %}"
+          >{{ object.author }}</a
+        >
+
+        <a
+          class="btn btn-outline-success btn-sm mr-1"
+          href="{% url 'todo-update' object.id %}"
+        >
+          Update
+        </a>
+        <a
+          class="btn btn-outline-danger btn-sm mr-1"
+          href="{% url 'todo-delete' object.id %}"
+        >
+          Delete
+        </a>
+        <a
+          class="btn btn-outline-secondary btn-sm mr-1"
+          href="{% url 'home' %}"
+        >
+          Back (all posts)
+        </a>
+      </div>
+      <h2 class="article-title">{{ object.desc|linebreaks }}</h2>
+    </div>
+  </article>
+</div>
+
+{% endblock main_content %}

@@ -1,0 +1,40 @@
+{% extends 'home/starter.html' %} {% load crispy_forms_tags %}
+<!-- to load the crispy forms -->
+
+{% block login_area %}
+<div class="row">
+  <div class="col-md-2 text-center">Ad Space, maybe?</div>
+
+  <!-- maybe a bg-img here is okay? -->
+  <div
+    class="overflow-auto col-md-8 border border-success"
+    style="height: 400px; background-color: rgba(1, 60, 255, 0.1)"
+  >
+    <div class="content-section">
+      <form method="POST">
+        {% csrf_token %}
+        <!-- this is a required line for added security -->
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-1">Log In</legend>
+          {{ form|crispy }}
+        </fieldset>
+
+        <div class="form-group">
+          <button class="btn btn-outline-info" type="submit">Log In</button>
+          <small class="text-muted ml-2">
+            <a href="{% url 'password_reset' %}"> Forgot Password? </a>
+          </small>
+        </div>
+      </form>
+      <div class="border-top pt-3">
+        <small class="text-muted">
+          Don't have an account yet?
+          <a class="ml-2" href='{% url "register" %}'> Register here! </a>
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2 text-center">Ad Space, maybe?</div>
+</div>
+{% endblock login_area %}

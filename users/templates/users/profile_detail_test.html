@@ -1,0 +1,181 @@
+{% extends 'users/users_base.html' %}
+
+<!-- Users' Profile page -->
+<!-- Self-explanatory page...I guess. LOL -->
+
+{% block profile_info_area %}
+
+<div class="col">
+  <div class="card-body">
+    <div class="card card-widget widget-user">
+      <!-- Add the bg color to the header using any of the bg-* classes -->
+      {% if user.profile.user_group == "King" %}
+      <div class="widget-user-header bg-purple">
+        {% elif user.profile.user_group == "Pawn" %}
+        <div class="widget-user-header bg-primary">
+          {% endif %}
+
+          <i class="widget-user-username">
+            <!-- USER BADGES DEPENDING ON USER_GROUP -->
+            {% if user.profile.user_group == "Pawn" %}
+            <i class="fas fa-chess-pawn ml-3"></i>
+            {% elif user.profile.user_group == "Rook" %}
+            <i class="fas fa-chess-rook ml-3"></i>
+            {% elif user.profile.user_group == "Knight" %}
+            <i class="fas fa-chess-knight ml-3"></i>
+            {% elif user.profile.user_group == "Bishop" %}
+            <i class="fas fa-chess-bishop ml-3"></i>
+            {% elif user.profile.user_group == "Queen" %}
+            <i class="fas fa-chess-queen ml-3"></i>
+            {% elif user.profile.user_group == "King" %}
+            <i class="fas fa-chess-king ml-3"></i>
+            {% endif %}
+          </i>
+          <small
+            class="text text-sm text-muted"
+            style="
+              font-family: 'Monotype Corsiva';
+              size: 8px;
+              color: rgba(1, 0, 1, 0.5);
+            "
+          >
+            {{ user.profile.title }}</small
+          >
+
+          <div class="content-section">
+            <div class="media">
+              <img
+                class="rounded-circle account-img elevation-5"
+                src="{{ user.profile.image.url }}"
+                style="height: 120px; width: 100px"
+              />
+              <div class="media-body">
+                <div class="row">
+                  <h4 class="account-heading ml-3">
+                    <strong> {{ user.username }} </strong>
+                  </h4>
+                  <!-- request.user.username means the current logged-in user -->
+                  {% if user.username == request.user.username %}
+                  <div>
+                    <a
+                      class="fa fa-edit ml-4"
+                      style="color: yellow"
+                      href="{% url 'profile-edit' user.username %}"
+                    ></a>
+                  </div>
+                  {% endif %}
+                </div>
+
+                <div class="content-section">
+                  <div class="media">
+                    <p class="media-body text-light ml-3">
+                      <strong><i>"{{ user.profile.quote }}"</i></strong>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="container col-md-2">
+                <div class="row" style="align-items: center">
+                  <!-- write if/else for blank fields here -->
+                  <i class="fa fa-google ml-1 mr-1" aria-hidden="true"></i>
+                  <i class="fa fa-linkedin-square ml-1 mr-1" aria-hidden="true"></i>
+                  <i class="fa fa-facebook-official ml-1 mr-1" aria-hidden="true"></i>
+                  <i class="fa fa-twitter-square ml-1 mr-1" aria-hidden="true"></i>
+                  <i class="fa fa-instagram ml-1 mr-1" aria-hidden="true"></i>
+                  <i class="fa fa-github ml-1 mr-1" aria-hidden="true"></i>
+                </div>
+                <div>
+                  <a class="btn btn-outline-dark btn-sm mr-1 mt-3" href="#">Send a message</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer" style="font-size: 12px; min-height: 500px">
+          <div class="row">
+            <div class="col-5 col-sm-2">
+              <div
+                class="nav flex-column nav-tabs nav-tabs-right h-100"
+                id="vert-tabs-right-tab"
+                role="tablist"
+                aria-orientation="vertical"
+              >
+                <a
+                  class="nav-link"
+                  id="vert-tabs-right-contactme-tab"
+                  data-toggle="pill"
+                  href="#vert-tabs-right-contactme"
+                  role="tab"
+                  aria-controls="vert-tabs-right-contactme"
+                  aria-selected="false"
+                  >Contact Me</a
+                >
+                <a
+                  class="nav-link active"
+                  id="vert-tabs-right-intro-tab"
+                  data-toggle="pill"
+                  href="#vert-tabs-right-intro"
+                  role="tab"
+                  aria-controls="vert-tabs-right-intro"
+                  aria-selected="true"
+                  >Intro</a
+                >
+                <a
+                  class="nav-link"
+                  id="vert-tabs-right-works-tab"
+                  data-toggle="pill"
+                  href="#vert-tabs-right-works"
+                  role="tab"
+                  aria-controls="vert-tabs-right-works"
+                  aria-selected="false"
+                  >Work Gallery</a
+                >
+              </div>
+            </div>
+
+            <div class="overflow-auto col-7 col-sm-10 border border-dark" style="min-height: 450px">
+              <div class="tab-content" id="vert-tabs-right-tabContent">
+                <div
+                  class="tab-pane fade"
+                  id="vert-tabs-right-contactme"
+                  role="tabpanel"
+                  aria-labelledby="vert-tabs-right-contactme-tab"
+                >
+                  <!-- user.profile.reach_me_intro -->
+                  You can reach me thru the ff links: <br />
+                </div>
+
+                <div
+                  class="tab-pane fade show active"
+                  id="vert-tabs-right-intro"
+                  role="tabpanel"
+                  aria-labelledby="vert-tabs-right-intro-tab"
+                >
+                  <i class="text-muted"
+                    >Member since {{ user.date_joined|date:"F Y" }}</i
+                  >
+                  <br />
+                  {{user.profile.about_me}}
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  id="vert-tabs-right-works"
+                  role="tabpanel"
+                  aria-labelledby="vert-tabs-right-works-tab"
+                >
+                  Work Gallery (photos) <br />
+                  Links to sites
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.card-body -->
+  </div>
+
+  {% endblock profile_info_area %}
+</div>

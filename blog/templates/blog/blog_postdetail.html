@@ -1,0 +1,89 @@
+{% extends 'blog/blog_base.html' %}
+{% load markdown_deux_tags %}
+{% load crispy_forms_tags %}
+
+{% block blog_content %}
+
+<hr />
+<article class="media content-section">
+  <img
+    class="rounded-circle article-img"
+    src="{{ object.author.profile.image.url }}"
+    style="height: 150px; max-width: 100px; min-width: 100px"
+  />
+
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="{% url 'profile' object.author %}"
+        >{{ object.author }}</a
+      >
+      <small class="text-muted"> on {{ object.date_posted }}</small>
+      <!--post.date_posted|date:"F, d, Y" == format without timestamp. -->
+      {% if object.author == user %}
+      <a
+        class="btn btn-outline-success btn-sm mr-1"
+        href="{% url 'post-update' object.id %}"
+      >
+        Update
+      </a>
+      <a
+        class="btn btn-outline-danger btn-sm mr-1"
+        href="{% url 'post-delete' object.id %}"
+      >
+        Delete
+      </a>
+      <a
+        class="btn btn-outline-secondary btn-sm mr-1"
+        href="{% url 'blog-home' %}"
+      >
+        Back (all posts)
+      </a>
+      {% else %}
+      <a
+        class="btn btn-outline-secondary btn-sm mr-1"
+        href="{% url 'blog-home' %}"
+      >
+        Back (all posts)
+      </a>
+      <a
+        class="btn btn-outline-info btn-sm mr-1"
+        href="{% url 'user-posts' object.author %}"
+      >
+        Posts by {{ object.author }}
+      </a>
+      {% endif %}
+    </div>
+    <h2 class="article-title">{{ object.title }}</h2>
+    <hr />
+    <p class="article-content">{{ object.get_markdown|linebreaks }}</p>
+  </div>
+</article>
+<div class="dropdown-divider">
+  <div>
+    <small class="text-muted ml-2"
+      ><i>modified: {{ object.date_modified }}</i></small
+    >
+  </div>
+</div>
+{{ comments.count }} Comment{{ comments|pluralize }} {% for comment in comments %}
+<blockquote class="blockquote">
+  <p class="mb-0">{{ comment.get_markdown|truncatechars:100 }}</p>
+  <footer class="blockquute-footer">
+    by: <cite title="Source Title">{{ comment.user }}</cite>
+  </footer>
+</blockquote>
+{% endfor %}
+
+<!-- experiment part -->
+<div>
+  {% if post.author != user %}
+  <!-- create a whitespace here for the update&delete buttons to be moved to the right -->
+  <a class="btn btn-outline-secondary btn-sm mr-1" href="#"> trying </a>
+  <a class="btn btn-outline-danger btn-sm mr-1" href="#"> this </a>
+  <a class="btn btn-outline-info btn-sm mr-1" href="#"> one out </a>
+  {% else %}
+  <small class="text-muted"> You are the author of this post. </small>
+  {% endif %}
+</div>
+
+{% endblock blog_content %}

@@ -1,0 +1,41 @@
+{% extends 'home/starter.html' %}
+{% load crispy_forms_tags %}
+
+{% block main_content %}
+<div class="container-fluid">
+  <h2>UL entry</h2>
+  <div class="row">
+    <div class="col-5">
+      reminders part on ULs
+      <hr />
+      {% for u_letter in u_letters %}
+      <div class="text text-lg">Title: {{ u_letter.title }}</div>
+      <div class="text text-sm">for: {{ u_letter.letter_for }}</div>
+      <div class="row">
+        <div class="text text-sm">posted on: {{ u_letter.date_posted }}</div>
+      </div>
+      <hr />
+      {% endfor %}
+    </div>
+
+    <div class="col-5">
+      <div class="container" style="background-color: rgba(1, 0, 0, 0.2)">
+        <div class="content-section">
+          <form method="POST">
+            {% csrf_token %}
+            <!-- this is a required line for added security -->
+            <fieldset class="form-group">
+              <legend class="border-bottom mb-1">Create a UL</legend>
+              {{ form|crispy }}
+            </fieldset>
+
+            <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Post</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main_content %}
+</div>

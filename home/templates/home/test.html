@@ -1,0 +1,173 @@
+{% extends 'home/starter.html' %}
+{% load crispy_forms_tags %}
+{% load pinax_announcements_tags %}
+
+
+<!-- User Home page -->
+<!-- This is the page related to the <home> icon button on the navigation bar or '<domain_name>/home' url.
+Just viewable by logged-in users.  -->
+
+{% block main_content %}
+
+
+<div class="row">
+    <!-- Chat area -->
+    <div class="col col-8">
+      Chat window?
+    </div>
+
+    <!-- CARDS area -->
+    <div class="container-fluid col">
+      <!-- To-Dos -->
+      <div class="container-fluid " style="height: 900px">
+        <div class="card card-warning">
+          <div class="card-header" style="max-height: 40px">
+            <i class="card-title text text-sm">Reminders:</i>
+
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+              </button>
+            </div>
+            <!-- /.card-tools -->
+          </div>
+        <div class="card-body" style="padding: 0">
+            <div class="card card-widget widget-user">
+            <div class="content-section">
+            <div class="media">
+              <div class="media-body text-justify overflow-auto" style="padding: .5rem; max-height: 250px">
+                <i style="font-size: 12px">
+                Got something to do later? Create a reminder and see it here everytime you check back in!
+                </i>
+                {% for todo in todos %}
+                  <hr>
+                <div clas="row">
+                  <i class="text text-sm text-muted" href="#"><b>{{ todo.category }}</b></i>
+                  </i>
+                    <a class='fa fa-pencil-alt text-sm ml-3 mr-1' href="{% url 'todo-update' todo.id %}"></a>
+                    <a class='fa fa-trash text-sm ml-1 mr-1' href="{% url 'todo-delete' todo.id %}"></a>
+                    <i class="text-sm"><small class="text pull-right ml-5"> Due: <text class="text-danger">{{ todo.finish_by|date:"F d" }}</text></small></i>
+              </div>
+                <div class="text text-sm ml-3"> {{ todo.desc|linebreaks }}</div>
+                <div class="row ml-3">
+                  <div class="text text-sm"> Status: {{ todo.status }} </div>
+                </div>
+                <hr>
+              {% endfor %}
+            </div>
+
+        </div>
+          <div class="card-footer" style="font-size: 12px; background-color: rgba(0,0,1,.15);">
+              no footer atm
+          </div>
+        </div>
+        <!-- where are the open div tags for these three? -->
+        </div>
+        </div>
+        </div> <!-- /To-Dos -->
+
+      <p>
+        <h4>Newest Posts</h4>
+        <i class="ml-auto">filter here </i>
+      </p>
+      {% for post in blogposts %}
+  <div class="border border-success mt-1 mb-1">
+    <article class="media media-sm content-section ml-2 mt-2 mb-3">
+      <img class='rounded-circle article-img' src='{{ post.author.profile.image.url }}' style="height: 30px; width: 30px">
+
+      <div class="media-body">
+        <div class="article-metadata">
+        <div class="row">
+          <a class="ml-3" href="{% url 'profile' post.author %}" style="font-family: 'Monotype Corsiva'; color: green">
+            <i><u>{{ post.author }}</u></i>
+          </a>
+          {% if post.author == user %}
+            <!-- create a whitespace here for the update&delete buttons to be moved to the right -->
+            <i class="ml-3" style="font-size: 12px">
+              <a class='fa fa-edit text-sm ml-2 mr-1' href="{% url 'post-update' post.id %}"></a>
+              <a class='fa fa-trash text-sm ml-1 mr-1' href="{% url 'post-delete' post.id %}" style="color: red"></a>
+              <small class="text-muted ml-2"><i class="fa fa-tag">: {{post.tag}}</i></small>
+            </i>
+          {% else %}
+          <small class="ml-3">
+            <small class="text-muted ml-2"><i class="fa fa-tag">: {{post.tag}}</i></small>
+          </small>
+          {% endif %}
+        </div>
+        </div>
+
+      <!-- post.id argument was needed here for individual posts to be displayed -->
+      <div class="row">
+        <a class="article-title col ml-3" href=" {% url 'post-detail' post.id %}">
+          {{ post.title|truncatechars:50 }}</a>
+          <div class=" col ml-5">
+            <i style="font-size: 12px">
+              {{ post.date_posted|date:"F d" }}
+            </i>
+          </div>
+        </div>
+          {% if post.modified %}
+            <i class="dropwdown-divider mr-auto text-muted">
+              <small>last modified: {{ post.date_modified }}</small>
+            </i>
+          {% endif %}
+      </div>
+    </div>
+    </article>
+
+  {% endfor %}
+
+  {% if is_paginated %}
+    <a class='btn  btn-sm btn-outline-info mb-4' href="?page=1"> First </a>
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <a class='btn btn-sm btn-info mb-4' href="?page={{ num }}"> {{ num }} </a>
+      {%  elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+        <a class='btn btn-sm btn-outline-info mb-4' href="?page={{ num }}"> {{ num }} </a>
+      {% endif %}
+    {% endfor %}
+    <a class='btn btn-sm btn-outline-info mb-4' href="?page={{ page_obj.paginator.num_pages }}"> Last </a>    
+  {% endif %}
+    </div>
+    <!-- / feed area -->
+
+
+
+<!-- /1st row right -->
+<!-- outmost div rightcontaining todo and the part below it (column-wise) -->
+
+
+<!-- 2nd row right -->
+<div class="card card-dark">
+  <div class="card-header">
+    <h3 class="card-title">Members</h3>
+    <i class="text text-sm ml-2"><small>(Need help? Got suggestions?)</small></i>
+  </div>
+  <div class="card-body">
+    {% for u in users %}
+    <div class="content-section">
+      <div class="media">
+          <img class="rounded-circle account-img elevation-5" src="{{ u.profile.image.url }}" style="height: 30px; width: 30px">
+          <div class="media-body">
+            <div class="row">
+                <h6 class="account-heading ml-3 mt-2">
+                  <a href="{% url 'profile' u.username %}">{{ u.username }}</a>
+                </h6>
+                <a class='btn btn-dark btn-sm ml-auto mt-1' href="#"> message </a>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+  <!-- /2nd row right -->
+  </div>
+<!-- /outmost div right column -->
+</div>
+<!-- IDK where these closing tags are linked to but this made the page work so... LEAVE THEM BE. :D -->
+
+</div>
+</div>
+
+
+
+{% endblock main_content %}

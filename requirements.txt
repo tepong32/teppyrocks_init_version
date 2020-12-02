@@ -1,0 +1,16 @@
+Django==3.0.5
+django-adminlte3==0.1.6
+django-bootstrap-modal-forms==1.5.0
+django-crispy==1.8.1
+django-markdownx
+django-marldown-deux
+django-pagedown==2.0.3
+djangorestframework==3.11.1
+django-widget-tweaks==1.4.2
+markdown2==2.3.8
+MarkupSafe==1.1.0
+oauth2client==4.1.2
+Pillow==7.0.0
+pinax-announcements
+#pinax-templates
+

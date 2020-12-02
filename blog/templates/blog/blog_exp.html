@@ -1,0 +1,72 @@
+{% extends 'blog/blog_base.html' %}
+
+
+{% block blog_content %}
+	<div class='container-fluid'>
+		<h4>Reminder part for posts in the Blog App</h4>
+	</div>
+
+<div class="row">
+	<!-- create-post area -->
+	{% load crispy_forms_tags %}
+	<div class="container col-4" style="height: 150px">
+		<div class='content-section'>
+			<form method='POST'>
+				{% csrf_token %} <!-- this is a required line for added security -->
+				<fieldset class='form-group'>
+					<legend class='border-bottom mb-1'> Create Post </legend>
+					{{ form|crispy }}
+				</fieldset>
+
+				<div class='form-group'>
+					<a class='btn btn-outline-secondary' href="{% url 'blog-home' %}"> Cancel </a>
+					<button class='btn btn-outline-info' type='submit'> Post </button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Pagination part for users' posts area -->
+	<div class='container col-8'>
+	<h1 class='mb-2'> <strong>Shout Board</strong><small class="text-muted"> ({{ page_obj.paginator.count }} posts)</small></h1>
+	<small class="text-muted"><i>(Newest first)</i></small>
+	{% if is_paginated %}
+		<a class='btn  btn-sm btn-outline-info mb-4' href="?page=1"> First </a>
+		{% for num in page_obj.paginator.page_range %}
+			{% if page_obj.number == num %}
+				<a class='btn btn-sm btn-info mb-4' href="?page={{ num }}"> {{ num }} </a>
+			{%  elif num > page_obj.number|add:'-15' and num < page_obj.number|add:'15' %}
+				<a class='btn btn-sm btn-outline-info mb-4' href="?page={{ num }}"> {{ num }} </a>
+			{% endif %}
+		{% endfor %}
+		<a class='btn btn-sm btn-outline-info mb-4' href="?page={{ page_obj.paginator.num_pages }}"> Last </a>		
+	{% endif %}
+
+	
+	{% for post in posts %}
+		<article class="media content-section">
+		  <img class='rounded-circle article-img' src='{{ post.author.profile.image.url }}'>
+
+		  <div class="media-body">
+		    <div class="article-metadata">
+		      <a class="mr-2" href="{% url 'profile' %}">{{ post.author }}</a>
+		      <small class="text-muted"> on {{ post.date_posted|date:"F d, Y" }}</small> 
+
+		      {% if post.author == user %}
+		        <!-- create a whitespace here for the update&delete buttons to be moved to the right -->
+		      	<a class='btn btn-outline-secondary btn-sm mr-1' href="{% url 'post-update' post.id %}"> Update </a>
+		        <a class='btn btn-outline-danger btn-sm mr-1' href="{% url 'post-delete' post.id %}"> Delete </a>
+		        <a class='btn btn-outline-info btn-sm mr-1' href="{% url 'user-posts' post.author %}"> All your posts </a>
+		      {% else %}
+		        <a class='btn btn-outline-info btn-sm mr-1' href="{% url 'user-posts' post.author %}"> See all posts by {{ post.author }} </a>
+		      {% endif %}
+			</div>
+			
+		    <h2><a class="article-title" href=" {% url 'post-detail' post.id %}">{{ post.title }}</a></h2> <!-- post.id was needed for individual posts to be displayed -->
+		    <p class="article-content"><div class="content-markdown">{{ post.content }}</div></p>
+		  </div>
+		</article>
+	{% endfor %}
+	</div>
+
+{% endblock blog_content %}

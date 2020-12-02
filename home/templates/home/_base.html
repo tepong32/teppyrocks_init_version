@@ -1,0 +1,103 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- this head part is default for AdminLTE -->
+    {% block title_outer %}
+        <title>{% block title %}{{ site.name }}{% endblock %}</title>
+    {% endblock %}
+
+	<!-- required meta tags -->
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
+	<!-- link rel=stylesheet here -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    {% block stylesheets %}
+        {% include 'adminlte/lib/_styles.html' %}
+    {% endblock %}
+
+    <!-- idk what this does but whatever -->
+    {% block extra_head %}{% endblock %}
+
+    <!-- added this part for pagedown header // see blog/blog_postform.html -->
+    {% block pagedown_head %}{% endblock pagedown_head %}
+
+	
+</head>
+<body class="hold-transition sidebar-mini sidebar-collapse layout-fixed">
+	{% include 'home/css.html' %}
+	{% include 'home/nav&sidebar.html' %}
+
+	{% block content %} {% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+<!-- jquery script for the marked and markdown part of css -->
+<!-- place above bootstrap // not sure if there's any reason why -->
+<script
+  src="https://code.jquery.com/jquery-3.4.1.slim.js"
+  integrity="sha256-BTlTdQO9/fascB1drekrDVkaKd9PkwBymMlHOiG+qLI="
+  crossorigin="anonymous"></script>
+<!-- fontawesome -->
+<script src="https://use.fontawesome.com/2363b49f19.js"></script>
+
+{% block javascript %}
+    {% include 'adminlte/lib/_scripts.html' %}
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
+
+{% block extra_foot %}{% endblock %}
+
+{% block extrascripts %}{% endblock extrascripts %}
+
+
+<!-- jquery script for the marked part of css // google: "marked.min.js cdn"-->
+<!-- place above bootstrap // not sure if there's any reason why -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.8.0/marked.min.js"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+
+
+<!-- might need to study more about jquery...or always copy-paste! -->
+<!-- this shows what part of the page/site we want to turn into markdown. In this case, the content-markdown classes for divs (put into the divs for {{post.content}}) -->
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".content-markdown").each(function(){
+            var content = $(this).text()
+            var markedContent = marked(content)
+            $(this).html(markedContent)
+        });
+
+
+        $(".post-detail-item img").each(function(){
+            $(this).addClass("img-responsive")
+        });
+
+        // for modals/popup create post window
+        $("#blogpost-create-modal").modalForm({
+            formURL: "{% url 'post-new' %}"});
+
+        $("#todo-create-modal").modalForm({
+            formURL: "{% url 'todo-new' %}"});
+
+        // datepicker testing
+        $('#datetimepicker').data("DateTimePicker").FUNCTION()
+    });
+</script>
+
+	
+</body>
+	{% include 'home/footer.html' %}
+
+</html>
